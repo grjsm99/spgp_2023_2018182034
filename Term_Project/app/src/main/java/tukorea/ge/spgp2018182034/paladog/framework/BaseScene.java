@@ -67,21 +67,21 @@ public class BaseScene {
     }
 
     public void draw(Canvas canvas) {
-        for (IGameObject gobj : UISprites) {
-            gobj.draw(canvas);
-        }
-        for (IGameObject gobj : attacks) {
-            gobj.draw(canvas);
-        }
+
+
         for (IGameObject gobj : minions) {
             gobj.draw(canvas);
         }
         for (IGameObject gobj : enemies) {
             gobj.draw(canvas);
         }
+        for (IGameObject gobj : attacks) {
+            gobj.draw(canvas);
+        }
+        for (IGameObject gobj : UISprites) {
+            gobj.draw(canvas);
+        }
     }
-
-
 
     private void removeCaseType(IGameObject object) {
         if(object instanceof UI)
@@ -99,7 +99,6 @@ public class BaseScene {
             enemies.add(object);
         else if(object instanceof Minion)
             minions.add(object);
-
     }
     public boolean onTouchEvent(MotionEvent event) {
         return false;

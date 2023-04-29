@@ -5,19 +5,19 @@ import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.util.Log;
 
-public class Sprite implements IGameObject {
+public class Sprite {
+    // 단일 스프라이트
     private static final String TAG = Sprite.class.getSimpleName();
     protected Bitmap bitmap;
     protected RectF dstRect = new RectF();
     protected float x, y, width, height;
 
-    protected boolean isAnim;   // false일경우 단일 스프라이트
-    public Sprite(int bitmapResId, float cx, float cy, float width, float height, boolean isAnim) {
-        this.x = cx;
-        this.y = cy;
+    public Sprite(int bitmapResId, float cx, float cy, float width, float height) {
+        this.x = cx * Metrics.game_width;
+        this.y = cy * Metrics.game_height;
         this.width = width * Metrics.game_width;
         this.height = height * Metrics.game_height;
-        this.isAnim = isAnim;
+
         if (bitmapResId != 0) {
             setBitmapResource(bitmapResId);
         }
@@ -26,7 +26,7 @@ public class Sprite implements IGameObject {
         Log.v(TAG, "Created " + this.getClass().getSimpleName() + "@" + System.identityHashCode(this));
     }
 
-    protected void setBitmapResource(int bitmapResId) {
+    public void setBitmapResource(int bitmapResId) {
         bitmap = BitmapManager.get(bitmapResId);
     }
 
@@ -36,11 +36,6 @@ public class Sprite implements IGameObject {
         dstRect.set(x - half_width, y - half_height, x + half_width, y + half_height);
     }
 
-    @Override
-    public void update() {
-    }
-
-    @Override
     public void draw(Canvas canvas) {
         canvas.drawBitmap(bitmap, null, dstRect, null);
     }

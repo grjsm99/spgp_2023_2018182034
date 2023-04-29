@@ -9,7 +9,7 @@ public class LobbyScene extends BaseScene {
 
 
     public LobbyScene() {
-        add(new UI(R.mipmap.lobby, Metrics.game_width/2, Metrics.game_height/2, 1, 1, false));
+        add(new UI(R.mipmap.lobby, 0.5f, 0.5f, 1, 1, 1));
     }
 
     public void update(long elapsedNanos) {

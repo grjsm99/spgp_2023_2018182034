@@ -38,6 +38,8 @@ public class GameView extends View implements Choreographer.FrameCallback {
 
         running = true;
         Choreographer.getInstance().postFrameCallback(this);
+        // 네비게이션 바 삭제
+        setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
     private long previousNanos;
