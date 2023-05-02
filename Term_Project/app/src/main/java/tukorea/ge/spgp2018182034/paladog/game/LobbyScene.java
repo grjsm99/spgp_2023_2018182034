@@ -1,19 +1,39 @@
 package tukorea.ge.spgp2018182034.paladog.game;
 
+import android.graphics.Rect;
+import android.util.Log;
+import android.view.MotionEvent;
+
 import tukorea.ge.spgp2018182034.paladog.R;
 import tukorea.ge.spgp2018182034.paladog.framework.BaseScene;
+import tukorea.ge.spgp2018182034.paladog.framework.IButtonReact;
+import tukorea.ge.spgp2018182034.paladog.framework.IGameObject;
 import tukorea.ge.spgp2018182034.paladog.framework.Metrics;
 import tukorea.ge.spgp2018182034.paladog.framework.UI;
+import tukorea.ge.spgp2018182034.paladog.framework.UIButton;
 
 public class LobbyScene extends BaseScene {
 
 
     public LobbyScene() {
+
         add(new UI(R.mipmap.lobby, 0.5f, 0.5f, 1, 1, 1));
+        add(new UIButton(R.mipmap.startbutton, 0.8f, 0.85f, 0.3f, 0.2f, 1, new IButtonReact() {
+            @Override
+            public void onClick(int eventType) {
+                new MainScene().pushScene();
+            }
+        }));
+
     }
 
     public void update(long elapsedNanos) {
         super.update(elapsedNanos);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
     }
 
 }

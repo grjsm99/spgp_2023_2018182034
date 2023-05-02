@@ -7,6 +7,10 @@ public class Metrics {
     public static float game_height = 9.0f;
     public static int x_offset = 0, y_offset = 0;
 
+    public static float elapsedTime = 0;
+    public static int view_width = 0;
+    public static int view_height = 0;
+
     public static void setGameSize(float width, float height) {
         game_width = width;
         game_height = height;

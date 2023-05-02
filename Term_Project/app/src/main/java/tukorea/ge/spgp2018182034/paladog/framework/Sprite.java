@@ -13,6 +13,7 @@ public class Sprite {
     protected float x, y, width, height;
 
     public Sprite(int bitmapResId, float cx, float cy, float width, float height) {
+
         this.x = cx * Metrics.game_width;
         this.y = cy * Metrics.game_height;
         this.width = width * Metrics.game_width;
@@ -21,7 +22,7 @@ public class Sprite {
         if (bitmapResId != 0) {
             setBitmapResource(bitmapResId);
         }
-        fixDstRect();
+        fixDstRect(this.x, this.y);
 
         Log.v(TAG, "Created " + this.getClass().getSimpleName() + "@" + System.identityHashCode(this));
     }
@@ -30,13 +31,15 @@ public class Sprite {
         bitmap = BitmapManager.get(bitmapResId);
     }
 
-    protected void fixDstRect() {
+    public void fixDstRect(float nx, float ny) {
         float half_width = width / 2;
         float half_height = height / 2;
-        dstRect.set(x - half_width, y - half_height, x + half_width, y + half_height);
+        dstRect.set(nx - half_width, ny - half_height, nx + half_width, ny + half_height);
     }
+
 
     public void draw(Canvas canvas) {
         canvas.drawBitmap(bitmap, null, dstRect, null);
     }
+
 }

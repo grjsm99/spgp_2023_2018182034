@@ -76,25 +76,43 @@ public class GameView extends View implements Choreographer.FrameCallback {
         }
 
         Log.v(TAG, "w" + w + " h  " + h);
+        Metrics.view_width = w;
+        Metrics.view_height = h;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
+
+        BaseScene scene = BaseScene.getTopScene();
         super.onDraw(canvas);
 
         canvas.save();
+        canvas.translate(0, 0);
+        canvas.scale(Metrics.scale, Metrics.scale);
+        if (scene != null) {
+            scene.drawRaw(canvas);
+        }
+        canvas.restore();
+
+        canvas.save();
+
+        //Metrics.x_offset -= 1.f;
         canvas.translate(Metrics.x_offset, Metrics.y_offset);
         canvas.scale(Metrics.scale, Metrics.scale);
-
-        BaseScene scene = BaseScene.getTopScene();
         if (scene != null) {
             scene.draw(canvas);
         }
+
         canvas.restore();
+
+
+
+
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
         boolean handled = BaseScene.getTopScene().onTouchEvent(event);
         if (handled) {
             return true;
