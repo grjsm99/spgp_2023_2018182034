@@ -3,13 +3,15 @@ package tukorea.ge.spgp2018182034.paladog.framework;
 
 import android.graphics.Canvas;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 
 public class BaseScene {
-    private static ArrayList<BaseScene> stack = new ArrayList<>();
+    private static Stack<BaseScene> scenes = new Stack<>();
     public static float frameTime;
     protected static Handler handler = new Handler();
 
@@ -19,26 +21,27 @@ public class BaseScene {
     protected ArrayList<IGameObject> enemies = new ArrayList<>();
     protected ArrayList<IGameObject> UIButtons = new ArrayList<>();
 
+    protected ArrayList<IGameObject> MovableUIs = new ArrayList<>();
     public static BaseScene getTopScene() {
-        int top = stack.size() - 1;
+        int top = scenes.size() - 1;
         if (top < 0) return null;
-        return stack.get(top);
+        return scenes.get(top);
     }
 
     public static void popAll() {
-        while (!stack.isEmpty()) {
+        while (!scenes.isEmpty()) {
             BaseScene scene = getTopScene();
             scene.popScene();
         }
     }
 
     public int pushScene() {
-        stack.add(this);
-        return stack.size();
+        scenes.push(this);
+        return scenes.size();
     }
 
-    public void popScene() {
-        stack.remove(this);
+    public static void popScene() {
+        scenes.pop();
         // TODO: additional callback should be called
     }
 
@@ -68,9 +71,15 @@ public class BaseScene {
         for (IGameObject gobj : UIButtons) {
             gobj.update();
         }
+        for (IGameObject gobj : MovableUIs) {
+            gobj.update();
+        }
     }
 
     public void draw(Canvas canvas) {
+        for (IGameObject gobj : MovableUIs) {
+            gobj.draw(canvas);
+        }
         for (IGameObject gobj : minions) {
             gobj.draw(canvas);
         }
@@ -78,6 +87,7 @@ public class BaseScene {
             gobj.draw(canvas);
         }
         for (IGameObject gobj : attacks) {
+
             gobj.draw(canvas);
         }
 
@@ -97,17 +107,26 @@ public class BaseScene {
     private void removeCaseType(IGameObject object) {
         if(object instanceof UIButton)
             UIButtons.remove(object);
+        else if(object instanceof MovableUI)
+            MovableUIs.remove(object);
+        else if(object instanceof Attack)
+            attacks.remove(object);
         else if(object instanceof Enemy)
             enemies.remove(object);
         else if(object instanceof Minion)
             minions.remove(object);
         else if(object instanceof UI)
             UISprites.remove(object);
+
     }
 
     private void addCaseType(IGameObject object) {
         if(object instanceof UIButton)
             UIButtons.add(object);
+        else if(object instanceof MovableUI)
+            MovableUIs.add(object);
+        else if(object instanceof Attack)
+            attacks.add(object);
         else if(object instanceof Enemy)
             enemies.add(object);
         else if(object instanceof Minion)
@@ -118,13 +137,20 @@ public class BaseScene {
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
         float x = event.getX() / Metrics.view_width;
-        float y = event.getRawY()/ Metrics.view_height;
-
+        float y = event.getY()/ Metrics.view_height;
+        Log.v("Click : ", "x = " + x + " y = " + y);
         for(IGameObject gobj : UIButtons) {
+
             UIButton button = (UIButton)gobj;
-            if(button.isClick(x,y)) button.onClick(action);
+            if(button.isClick(x,y)) {
+                button.onClick(event);
+                return true;
+            }
+            if(action == MotionEvent.ACTION_UP) {
+                button.releasePressed();
+            }
         }
-        return true;
+        return false;
     }
     public void removeObject(IGameObject gobj) {
         handler.post(new Runnable() {

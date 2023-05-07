@@ -3,10 +3,10 @@ package tukorea.ge.spgp2018182034.paladog.framework;
 import android.graphics.Canvas;
 
 
-
+// 움직이며 상태가 있는 게임 오브젝트들
 public class Unit implements IGameObject {
 
-    private enum unitState {
+    public enum unitState {
         IDLE,
         MOVE,
         ATTACK,
@@ -17,15 +17,19 @@ public class Unit implements IGameObject {
     protected unitState currState;
     protected float moveSpeed;
     protected float hp;
-    protected float atkSpeed;
-    
-    protected float x;
-    protected float y;      // 월드 좌표값
 
-    // 단독으로 생성자 호출 불가. => minion, enemy로 만들어야함
+    
+    protected float x = 0;
+    protected float y = 0;      // 월드 좌표값
+
+    // 단독으로 생성자 호출 불가. => ally, enemy, paladog으로 만들어야함
     protected Unit(int[] resID, int[] resFrameCount, float xSize, float ySize, float xPos, float yPos) {
+        animSprites = new AnimSprite[4];
+        currState = unitState.IDLE;
         for(int i=0; i<4; ++i)
-            animSprites[i] = new AnimSprite(resID[i], xPos, yPos, xSize, ySize, resFrameCount[i], true);
+             animSprites[i] = new AnimSprite(resID[i], xPos, yPos, xSize, ySize, resFrameCount[i], true);
+        x = xPos;
+        y = yPos;
     }
     @Override
     public void update() {
@@ -43,9 +47,16 @@ public class Unit implements IGameObject {
         animSprites[currState.ordinal()].ResetFrame();
     }
 
+    public unitState GetState() {
+        return currState;
+    }
+
     @Override
     public void draw(Canvas canvas) {
         animSprites[currState.ordinal()].draw(canvas);
     }
+
+    public float getXPos() { return x; }
+    public float getYPos() { return y; }
 
 }

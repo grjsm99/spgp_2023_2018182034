@@ -3,7 +3,7 @@ package tukorea.ge.spgp2018182034.paladog.framework;
 
 public class Metrics {
     public static float scale = 1.0f;
-    public static float game_width = 16.9f;
+    public static float game_width = 18.0f;
     public static float game_height = 9.0f;
     public static int x_offset = 0, y_offset = 0;
 

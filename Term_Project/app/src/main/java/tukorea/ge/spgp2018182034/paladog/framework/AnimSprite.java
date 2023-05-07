@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
 
+import tukorea.ge.spgp2018182034.paladog.R;
+
 
 public class AnimSprite extends Sprite {
 
@@ -26,6 +28,10 @@ public class AnimSprite extends Sprite {
             frameWidth = imageWidth / frameCount;
             this.frameCount = frameCount;
         }
+
+        if(bitmapResId == R.drawable.paladogidle)
+            Log.v("z", imageWidth + "입니다");
+        // 이미지는 항상 1줄이여야함
         this.isLoop = isLoop;
         srcRect.set(0, 0, frameWidth, frameHeight);
         createdOn = System.currentTimeMillis();
@@ -45,8 +51,13 @@ public class AnimSprite extends Sprite {
         long now = System.currentTimeMillis();
         float time = (now - createdOn) / 1000.0f;
         // isLoop시 해당 스프라이트 애니메이션을 반복, 아닐경우 마지막 프레임에서 멈춘다.
-        int frameIndex = isLoop ? Math.round(time * fps) % frameCount : Math.min(Math.round(time * fps), frameCount);
+        int frameIndex = isLoop ? Math.round(time * fps) % frameCount : Math.min(Math.round(time * fps), frameCount-1);
         srcRect.set(frameIndex * frameWidth, 0, (frameIndex + 1) * frameWidth, frameHeight);
+        canvas.drawBitmap(bitmap, srcRect, dstRect, null);
+    }
+
+    public void drawFrame(Canvas canvas, int frame) {
+        srcRect.set(frame * frameWidth, 0, (frame + 1) * frameWidth, frameHeight);
         canvas.drawBitmap(bitmap, srcRect, dstRect, null);
     }
 

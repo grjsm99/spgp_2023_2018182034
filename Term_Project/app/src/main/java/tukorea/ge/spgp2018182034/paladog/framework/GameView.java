@@ -85,27 +85,23 @@ public class GameView extends View implements Choreographer.FrameCallback {
 
         BaseScene scene = BaseScene.getTopScene();
         super.onDraw(canvas);
-
         canvas.save();
-        canvas.translate(0, 0);
-        canvas.scale(Metrics.scale, Metrics.scale);
-        if (scene != null) {
-            scene.drawRaw(canvas);
-        }
-        canvas.restore();
-
-        canvas.save();
-
         //Metrics.x_offset -= 1.f;
         canvas.translate(Metrics.x_offset, Metrics.y_offset);
         canvas.scale(Metrics.scale, Metrics.scale);
         if (scene != null) {
             scene.draw(canvas);
         }
-
         canvas.restore();
 
+        canvas.save();
+        canvas.translate(0, 0);
+        canvas.scale(Metrics.scale, Metrics.scale);
 
+        if (scene != null) {
+            scene.drawRaw(canvas);
+        }
+        canvas.restore();
 
 
     }
