@@ -3,6 +3,7 @@ package tukorea.ge.spgp2018182034.paladog.framework;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 
 
 // 움직이며 상태가 있는 게임 오브젝트들
@@ -36,7 +37,8 @@ public class Unit implements IGameObject {
         for(int i=0; i<4; ++i)
              animSprites[i] = new AnimSprite(resID[i], xPos, yPos, xSize, ySize, resFrameCount[i], loop[i]);
         x = xPos;
-        y = yPos;
+        y = yPos * Metrics.game_height;
+        Log.v("t", y +"임");
         this.moveSpeed = moveSpeed;
         this.hp = hp;
     }

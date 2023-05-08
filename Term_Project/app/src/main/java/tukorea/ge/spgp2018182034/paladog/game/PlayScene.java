@@ -41,6 +41,34 @@ public class PlayScene extends BaseScene {
             R.mipmap.bg2,
             R.mipmap.bg3
     };
+
+    private final int ally1Resid[] = {
+            R.drawable.ally1move,
+            R.drawable.ally1move,
+            R.drawable.ally1move,
+            R.drawable.ally1move
+    };
+    private final int ally1FrameCnt[] = {
+            12,12,12,12
+    };
+    private final int ally2Resid[] = {
+            R.drawable.ally2move,
+            R.drawable.ally2move,
+            R.drawable.ally2move,
+            R.drawable.ally2move
+    };
+    private final int ally2FrameCnt[] = {
+            12,12,12,12
+    };
+    private final int ally3Resid[] = {
+            R.drawable.ally3move,
+            R.drawable.ally3move,
+            R.drawable.ally3move,
+            R.drawable.ally3move
+    };
+    private final int ally3FrameCnt[] = {
+            12,12,12,12
+    };
     public PlayScene(int stage) {
 
         Metrics.x_offset = 0;
@@ -95,7 +123,7 @@ public class PlayScene extends BaseScene {
                 if(eventType == MotionEvent.ACTION_UP) {
                     if(foodNum.getNumber() >= 10) {
                         foodNum.addNumber(-10);
-                        // 추가
+                        add(new Ally(ally1Resid, ally1FrameCnt, 0.13f, 0.13f, 0.f, 0.4f - 0.13f / 2, 10.f, 0.35f, 1.f, 2.f));
                     }
                 }
             }
@@ -104,14 +132,26 @@ public class PlayScene extends BaseScene {
         add(new UIButton(R.mipmap.ally2button,R.mipmap.ally2button_pressed, 0.3f, 0.715f, 0.14f, 0.14f, 1, new IButtonReact() {
             @Override
             public void onClick(MotionEvent event) {
-
+                int eventType = event.getAction();
+                if(eventType == MotionEvent.ACTION_UP) {
+                    if(foodNum.getNumber() >= 30) {
+                        foodNum.addNumber(-30);
+                        add(new Ally(ally2Resid, ally2FrameCnt, 0.2f, 0.23f, 0.0f, 0.4f - 0.23f / 2, 30.f, 0.1f, 2.f, 10.f));
+                    }
+                }
             }
         }));
 
         add(new UIButton(R.mipmap.ally3button,R.mipmap.ally3button_pressed, 0.49f, 0.715f, 0.14f, 0.14f, 1, new IButtonReact() {
             @Override
             public void onClick(MotionEvent event) {
-
+                int eventType = event.getAction();
+                if(eventType == MotionEvent.ACTION_UP) {
+                    if(foodNum.getNumber() >= 40) {
+                        foodNum.addNumber(-40);
+                        add(new Ally(ally3Resid, ally3FrameCnt, 0.2f, 0.23f, 0.0f, 0.4f - 0.23f / 2, 30.f, 0.8f, 2.f, 10.f));
+                    }
+                }
             }
         }));
 
@@ -124,7 +164,7 @@ public class PlayScene extends BaseScene {
                     if (mpNum.getNumber() > 1 && paladog.GetState() != Unit.unitState.ATTACK) {
                         paladog.attack();
                         mpNum.addNumber(-1);
-                        add(new Attack(R.mipmap.atk1, 0.1f, 0.1f, paladog.getXPos(), paladog.getYPos() - 0.06f, 1));
+                        add(new Attack(R.mipmap.atk1, 0.1f, 0.1f, paladog.getXPos(), paladog.getYPos() / Metrics.game_height - 0.06f, 1));
                     }
                 }
             }
@@ -141,9 +181,9 @@ public class PlayScene extends BaseScene {
         paladogFramecnt[2] = 10;
         paladogRes[3] = R.drawable.paladogidle;
         paladogFramecnt[3] = 12;
-        paladog = new Paladog(paladogRes, paladogFramecnt, 0.2f, 0.2f, 0.5f, 0.3f, 100,  0.2f);
+        paladog = new Paladog(paladogRes, paladogFramecnt, 0.2f, 0.2f, 0.5f, 0.4f - 0.2f / 2, 100,  0.2f);
 
-        foodNum = new Number(R.drawable.num, 0.313f, 0.55f, 0.04f, 0.04f, 10);
+        foodNum = new Number(R.drawable.num, 0.313f, 0.55f, 0.04f, 0.04f, 50);
         mpNum = new Number(R.drawable.num, 0.9f, 0.55f, 0.04f, 0.04f, 10);
 
         foodGauge = new Gauge(R.mipmap.foodgauge, 0.21f, 0.568f, 0.24f, 0.03f, 1);

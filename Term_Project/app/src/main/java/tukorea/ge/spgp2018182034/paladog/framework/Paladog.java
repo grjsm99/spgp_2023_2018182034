@@ -19,7 +19,7 @@ public class Paladog extends Unit {
             x += moveSpeed * Metrics.elapsedTime * sign;
             x = Math.min(Math.max(x, 0), 2.0f);
             for(int i=0; i<unitState.NUM.ordinal(); ++i)
-                animSprites[i].fixDstRect(x * Metrics.game_width * sign, y* Metrics.game_height);
+                animSprites[i].fixDstRect(x * Metrics.game_width * sign, y);
 
             // 팔라독의 위치에 따라 PlayScene의 카메라를 옮겨준다.
             Metrics.x_offset = -Math.round(Math.min(Math.max(x-0.5f, 0), 1.0f) * Metrics.view_width);

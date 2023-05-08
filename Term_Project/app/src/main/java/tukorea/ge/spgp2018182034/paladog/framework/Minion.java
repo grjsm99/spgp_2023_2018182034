@@ -14,6 +14,7 @@ public class Minion extends Unit {
         super(resID, resFrameCount, xSize, ySize, xPos, yPos, hp, moveSpeed);
         this.atkSpeed = atkSpped;
         this.dmg = dmg;
+        currState = unitState.MOVE;
     }
 
     @Override

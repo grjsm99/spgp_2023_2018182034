@@ -13,7 +13,7 @@ public class AnimSprite extends Sprite {
     protected Rect srcRect = new Rect();
     protected long createdOn;
     protected int frameWidth, frameHeight;
-    protected float fps = 30.f;
+    protected float fps = 15.f;
 
     protected boolean isLoop;
 
