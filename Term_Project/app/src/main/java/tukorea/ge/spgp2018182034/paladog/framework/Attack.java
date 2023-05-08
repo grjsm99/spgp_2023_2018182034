@@ -1,6 +1,7 @@
 package tukorea.ge.spgp2018182034.paladog.framework;
 
 import android.graphics.Canvas;
+import android.graphics.RectF;
 
 public class Attack implements IGameObject {
 
@@ -28,4 +29,7 @@ public class Attack implements IGameObject {
     public void draw(Canvas canvas) {
         animSprite.draw(canvas);
     }
+
+    @Override
+    public RectF getDstRect() { return animSprite.dstRect; }
 }

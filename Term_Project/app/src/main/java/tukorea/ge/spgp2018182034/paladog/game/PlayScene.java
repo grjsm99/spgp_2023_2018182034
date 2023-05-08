@@ -1,14 +1,18 @@
 package tukorea.ge.spgp2018182034.paladog.game;
 
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 
 import tukorea.ge.spgp2018182034.paladog.R;
+import tukorea.ge.spgp2018182034.paladog.framework.Ally;
 import tukorea.ge.spgp2018182034.paladog.framework.Attack;
 import tukorea.ge.spgp2018182034.paladog.framework.BaseScene;
+import tukorea.ge.spgp2018182034.paladog.framework.Enemy;
 import tukorea.ge.spgp2018182034.paladog.framework.Gauge;
 import tukorea.ge.spgp2018182034.paladog.framework.IButtonReact;
+import tukorea.ge.spgp2018182034.paladog.framework.IGameObject;
 import tukorea.ge.spgp2018182034.paladog.framework.Metrics;
 import tukorea.ge.spgp2018182034.paladog.framework.MovableUI;
 import tukorea.ge.spgp2018182034.paladog.framework.Number;
@@ -87,7 +91,13 @@ public class PlayScene extends BaseScene {
         add(new UIButton(R.mipmap.ally1button,R.mipmap.ally1button_pressed, 0.11f, 0.715f, 0.14f, 0.14f, 1, new IButtonReact() {
             @Override
             public void onClick(MotionEvent event) {
-
+                int eventType = event.getAction();
+                if(eventType == MotionEvent.ACTION_UP) {
+                    if(foodNum.getNumber() >= 10) {
+                        foodNum.addNumber(-10);
+                        // 추가
+                    }
+                }
             }
         }));
 
@@ -101,7 +111,7 @@ public class PlayScene extends BaseScene {
         add(new UIButton(R.mipmap.ally3button,R.mipmap.ally3button_pressed, 0.49f, 0.715f, 0.14f, 0.14f, 1, new IButtonReact() {
             @Override
             public void onClick(MotionEvent event) {
-                
+
             }
         }));
 
@@ -131,7 +141,7 @@ public class PlayScene extends BaseScene {
         paladogFramecnt[2] = 10;
         paladogRes[3] = R.drawable.paladogidle;
         paladogFramecnt[3] = 12;
-        paladog = new Paladog(paladogRes, paladogFramecnt, 0.2f, 0.2f, 0.5f, 0.3f);
+        paladog = new Paladog(paladogRes, paladogFramecnt, 0.2f, 0.2f, 0.5f, 0.3f, 100,  0.2f);
 
         foodNum = new Number(R.drawable.num, 0.313f, 0.55f, 0.04f, 0.04f, 10);
         mpNum = new Number(R.drawable.num, 0.9f, 0.55f, 0.04f, 0.04f, 10);
@@ -156,10 +166,58 @@ public class PlayScene extends BaseScene {
         mpNum.setNumber(Math.min(mpNum.getNumber() + Metrics.elapsedTime * 0.5f, 100));
         foodGauge.setPercent(foodNum.getNumber());
         mpGauge.setPercent(mpNum.getNumber());
+
+        for (IGameObject gobj : enemies) {
+            Enemy enemy = (Enemy)gobj;
+            if(enemy.isDead()) enemies.remove(gobj);
+        }
+
+        for (IGameObject gobj : allies) {
+            Ally ally = (Ally)gobj;
+            if(ally.isDead()) allies.remove(gobj);
+        }
     }
 
     private void checkCollision() {
+        Enemy forwardEnemy = null;
+        Ally forwardAlly = null;
 
+        if(allies.size() > 0)
+            forwardAlly = (Ally)allies.get(0);
+        if(enemies.size() > 0)
+            forwardEnemy = (Enemy)enemies.get(0);
+
+        if(attacks.size() > 0 && forwardEnemy != null) {
+            IGameObject attack = attacks.get(0);
+            if(attack.getDstRect().contains(forwardEnemy.getDstRect())) {
+                attacks.remove(attack);
+                forwardEnemy.ChangeState(Unit.unitState.DIE);
+            }
+        }
+
+        if(forwardAlly != null) {
+            for(IGameObject enemyObj : enemies) {
+                Enemy enemy = (Enemy)enemyObj;
+                // 이동하다 맨앞의 적을 만난경우
+                if(enemy.GetState() == Unit.unitState.MOVE && forwardAlly.GetState() != Unit.unitState.DIE) {
+                    if(enemy.getDstRect().contains(forwardAlly.getDstRect())) {
+                        enemy.setTargetUnit(forwardAlly);
+                    }
+                }
+            }
+        }
+
+        if(forwardEnemy != null) {
+            for(IGameObject allyObj : allies) {
+                Ally ally = (Ally)allyObj;
+                // 이동하다 맨앞의 적을 만난경우
+                if(ally.GetState() == Unit.unitState.MOVE && forwardEnemy.GetState() != Unit.unitState.DIE) {
+                    if(ally.getDstRect().contains(forwardEnemy.getDstRect())) {
+                        ally.setTargetUnit(forwardEnemy);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -179,8 +237,6 @@ public class PlayScene extends BaseScene {
             t-=0.001f;
 
             canvas.scale(-1, 1);
-
-
             paladog.draw(canvas);
 
             canvas.restore();

@@ -7,12 +7,9 @@ public class Paladog extends Unit {
 
     private boolean reverse = false;
     private float attackMotionTime = -1;
-    public Paladog(int[] resID, int[] resFrameCount, float xSize, float ySize, float xPos, float yPos) {
+    public Paladog(int[] resID, int[] resFrameCount, float xSize, float ySize, float xPos, float yPos, float hp,float moveSpeed) {
 
-        super(resID, resFrameCount, xSize, ySize, xPos, yPos);
-        moveSpeed = 0.2f;
-
-
+        super(resID, resFrameCount, xSize, ySize, xPos, yPos, hp, moveSpeed);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package tukorea.ge.spgp2018182034.paladog.framework;
 
 import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.RectF;
 
 
 // 움직이며 상태가 있는 게임 오브젝트들
@@ -18,18 +20,25 @@ public class Unit implements IGameObject {
     protected float moveSpeed;
     protected float hp;
 
-    
+    private final boolean loop[] = {
+        true,
+        true,
+        false,
+        false
+    };
     protected float x = 0;
     protected float y = 0;      // 월드 좌표값
 
     // 단독으로 생성자 호출 불가. => ally, enemy, paladog으로 만들어야함
-    protected Unit(int[] resID, int[] resFrameCount, float xSize, float ySize, float xPos, float yPos) {
+    protected Unit(int[] resID, int[] resFrameCount, float xSize, float ySize, float xPos, float yPos, float hp, float moveSpeed) {
         animSprites = new AnimSprite[4];
         currState = unitState.IDLE;
         for(int i=0; i<4; ++i)
-             animSprites[i] = new AnimSprite(resID[i], xPos, yPos, xSize, ySize, resFrameCount[i], true);
+             animSprites[i] = new AnimSprite(resID[i], xPos, yPos, xSize, ySize, resFrameCount[i], loop[i]);
         x = xPos;
         y = yPos;
+        this.moveSpeed = moveSpeed;
+        this.hp = hp;
     }
     @Override
     public void update() {
@@ -58,5 +67,12 @@ public class Unit implements IGameObject {
 
     public float getXPos() { return x; }
     public float getYPos() { return y; }
+    public float getHP() { return hp; }
+    @Override
+    public RectF getDstRect() { return animSprites[0].dstRect; }
 
+    public void attacked(float dmg) {
+        hp -= dmg;
+        if(hp <= 0) ChangeState(unitState.DIE);
+    }
 }

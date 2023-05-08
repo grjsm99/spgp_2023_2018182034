@@ -17,7 +17,7 @@ public class BaseScene {
 
     protected ArrayList<IGameObject> UISprites = new ArrayList<>();
     protected ArrayList<IGameObject> attacks = new ArrayList<>();
-    protected ArrayList<IGameObject> minions = new ArrayList<>();
+    protected ArrayList<IGameObject> allies = new ArrayList<>();
     protected ArrayList<IGameObject> enemies = new ArrayList<>();
     protected ArrayList<IGameObject> UIButtons = new ArrayList<>();
 
@@ -62,7 +62,7 @@ public class BaseScene {
         for (IGameObject gobj : attacks) {
             gobj.update();
         }
-        for (IGameObject gobj : minions) {
+        for (IGameObject gobj : allies) {
             gobj.update();
         }
         for (IGameObject gobj : enemies) {
@@ -80,7 +80,7 @@ public class BaseScene {
         for (IGameObject gobj : MovableUIs) {
             gobj.draw(canvas);
         }
-        for (IGameObject gobj : minions) {
+        for (IGameObject gobj : allies) {
             gobj.draw(canvas);
         }
         for (IGameObject gobj : enemies) {
@@ -113,8 +113,8 @@ public class BaseScene {
             attacks.remove(object);
         else if(object instanceof Enemy)
             enemies.remove(object);
-        else if(object instanceof Minion)
-            minions.remove(object);
+        else if(object instanceof Ally)
+            allies.remove(object);
         else if(object instanceof UI)
             UISprites.remove(object);
 
@@ -129,8 +129,8 @@ public class BaseScene {
             attacks.add(object);
         else if(object instanceof Enemy)
             enemies.add(object);
-        else if(object instanceof Minion)
-            minions.add(object);
+        else if(object instanceof Ally)
+            allies.add(object);
         else if(object instanceof UI)
             UISprites.add(object);
     }

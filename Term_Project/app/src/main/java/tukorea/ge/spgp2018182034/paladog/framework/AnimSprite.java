@@ -64,4 +64,10 @@ public class AnimSprite extends Sprite {
     public void ResetFrame() {
         createdOn = System.currentTimeMillis();
     }
+
+    public int getCurrFrameIndex() {
+        long now = System.currentTimeMillis();
+        float time = (now - createdOn) / 1000.0f;
+        return isLoop ? Math.round(time * fps) % frameCount : Math.min(Math.round(time * fps), frameCount-1);
+    }
 }
