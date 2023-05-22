@@ -3,6 +3,7 @@ package tukorea.ge.spgp2018182034.paladog.framework;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.renderscript.Float2;
 import android.util.Log;
 
 
@@ -31,14 +32,22 @@ public class Unit implements IGameObject {
     protected float y = 0;      // 월드 좌표값
 
     // 단독으로 생성자 호출 불가. => ally, enemy, paladog으로 만들어야함
-    protected Unit(int[] resID, int[] resFrameCount, float xSize, float ySize, float xPos, float yPos, float hp, float moveSpeed) {
+    protected Unit(int[] resID, int[] resFrameCount, Float2[] resSizeRate, float xSize, float ySize, float xPos, float yPos, float hp, float moveSpeed) {
         animSprites = new AnimSprite[4];
         currState = unitState.IDLE;
+
+        float dRectSizeX;
+        float dRectSizeY;
         for(int i=0; i<4; ++i)
-             animSprites[i] = new AnimSprite(resID[i], xPos, yPos, xSize, ySize, resFrameCount[i], loop[i]);
-        x = xPos;
-        y = yPos * Metrics.game_height;
-        Log.v("t", y +"임");
+        {
+            dRectSizeX = xSize * resSizeRate[i].x;
+            dRectSizeY = ySize * resSizeRate[i].y;
+            // yPos는 캐릭터 이미지가 그려질 위치의 맨 아래부분을 기준으로 함
+            animSprites[i] = new AnimSprite(resID[i], xPos, yPos - dRectSizeY / 2, dRectSizeX, dRectSizeY, resFrameCount[i], loop[i]);
+        }
+        x = xPos * Metrics.game_width;
+        y = ( yPos - (ySize * resSizeRate[0].y) / 2) * Metrics.game_height;
+
         this.moveSpeed = moveSpeed;
         this.hp = hp;
     }
@@ -47,8 +56,8 @@ public class Unit implements IGameObject {
         // 현재 그려지고 있는 상태의 sprite만 위치를 업데이트 해준다.
         if(currState == unitState.MOVE) {
             x += moveSpeed * Metrics.elapsedTime;
-            animSprites[currState.ordinal()].fixDstRect(x, y);
         }
+        animSprites[currState.ordinal()].fixDstRect(x, y);
     }
 
     public void ChangeState(unitState state) {
@@ -71,7 +80,7 @@ public class Unit implements IGameObject {
     public float getYPos() { return y; }
     public float getHP() { return hp; }
     @Override
-    public RectF getDstRect() { return animSprites[0].dstRect; }
+    public RectF getDstRect() { return animSprites[currState.ordinal()].dstRect; }
 
     public void attacked(float dmg) {
         hp -= dmg;

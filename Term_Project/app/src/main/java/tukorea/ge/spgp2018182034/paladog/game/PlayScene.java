@@ -2,6 +2,7 @@ package tukorea.ge.spgp2018182034.paladog.game;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.renderscript.Float2;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -20,6 +21,7 @@ import tukorea.ge.spgp2018182034.paladog.framework.Paladog;
 import tukorea.ge.spgp2018182034.paladog.framework.UI;
 import tukorea.ge.spgp2018182034.paladog.framework.UIButton;
 import tukorea.ge.spgp2018182034.paladog.framework.Unit;
+import tukorea.ge.spgp2018182034.paladog.framework.resInfo;
 
 public class PlayScene extends BaseScene {
     private static final String TAG = MainScene.class.getSimpleName();
@@ -33,46 +35,20 @@ public class PlayScene extends BaseScene {
     private Number foodNum;
     private Number mpNum;
 
+    private int stage;
+    private float spawnMaxCooldown;
+    private float spawnCooldown;
     private Gauge foodGauge;
 
     private Gauge mpGauge;
-    private final int bgResid[] = {
-            R.mipmap.bg1,
-            R.mipmap.bg2,
-            R.mipmap.bg3
-    };
 
-    private final int ally1Resid[] = {
-            R.drawable.ally1move,
-            R.drawable.ally1move,
-            R.drawable.ally1move,
-            R.drawable.ally1move
-    };
-    private final int ally1FrameCnt[] = {
-            12,12,12,12
-    };
-    private final int ally2Resid[] = {
-            R.drawable.ally2move,
-            R.drawable.ally2move,
-            R.drawable.ally2move,
-            R.drawable.ally2move
-    };
-    private final int ally2FrameCnt[] = {
-            12,12,12,12
-    };
-    private final int ally3Resid[] = {
-            R.drawable.ally3move,
-            R.drawable.ally3move,
-            R.drawable.ally3move,
-            R.drawable.ally3move
-    };
-    private final int ally3FrameCnt[] = {
-            12,12,12,12
-    };
     public PlayScene(int stage) {
+        this.stage = stage;
 
+        spawnMaxCooldown = 2.0f - (float)stage / 5.0f;
+        spawnCooldown = spawnMaxCooldown;
         Metrics.x_offset = 0;
-        add(new MovableUI(bgResid[stage], 0.5f, 0.25f, 3, 0.6f, 1));
+        add(new MovableUI(resInfo.bgResid[stage], 0.5f, 0.25f, 3, 0.6f, 1));
         add(new UI(R.mipmap.playui, 0.5f, 0.75f, 1, 0.6f, 1));
         add(new UIButton(R.mipmap.rightmove,R.mipmap.rightmove_pressed, 0.38f, 0.915f, 0.223f, 0.17f, 1, new IButtonReact() {
             @Override
@@ -123,7 +99,7 @@ public class PlayScene extends BaseScene {
                 if(eventType == MotionEvent.ACTION_UP) {
                     if(foodNum.getNumber() >= 10) {
                         foodNum.addNumber(-10);
-                        add(new Ally(ally1Resid, ally1FrameCnt, 0.13f, 0.13f, 0.f, 0.4f - 0.13f / 2, 10.f, 0.35f, 1.f, 2.f));
+                        add(new Ally(resInfo.ally1Resid, resInfo.ally1FrameCnt, resInfo.ally1sizeRate, 0.13f, 0.13f, 0.0f, 0.4f, 10.f, 0.3f, 1.f, 2.f));
                     }
                 }
             }
@@ -136,7 +112,7 @@ public class PlayScene extends BaseScene {
                 if(eventType == MotionEvent.ACTION_UP) {
                     if(foodNum.getNumber() >= 30) {
                         foodNum.addNumber(-30);
-                        add(new Ally(ally2Resid, ally2FrameCnt, 0.2f, 0.23f, 0.0f, 0.4f - 0.23f / 2, 30.f, 0.1f, 2.f, 10.f));
+                        add(new Ally(resInfo.ally2Resid, resInfo.ally2FrameCnt,resInfo.ally2sizeRate, 0.2f, 0.23f, 0.0f, 0.4f, 100.f, 0.1f, 2.f, 10.f));
                     }
                 }
             }
@@ -149,7 +125,7 @@ public class PlayScene extends BaseScene {
                 if(eventType == MotionEvent.ACTION_UP) {
                     if(foodNum.getNumber() >= 40) {
                         foodNum.addNumber(-40);
-                        add(new Ally(ally3Resid, ally3FrameCnt, 0.2f, 0.23f, 0.0f, 0.4f - 0.23f / 2, 30.f, 0.8f, 2.f, 10.f));
+                        add(new Ally(resInfo.ally3Resid, resInfo.ally3FrameCnt, resInfo.ally3sizeRate,0.2f, 0.23f, 0.0f, 0.4f, 70.f, 0.8f, 2.f, 10.f));
                     }
                 }
             }
@@ -164,26 +140,16 @@ public class PlayScene extends BaseScene {
                     if (mpNum.getNumber() > 1 && paladog.GetState() != Unit.unitState.ATTACK) {
                         paladog.attack();
                         mpNum.addNumber(-1);
-                        add(new Attack(R.mipmap.atk1, 0.1f, 0.1f, paladog.getXPos(), paladog.getYPos() / Metrics.game_height - 0.06f, 1));
+                        add(new Attack(R.mipmap.atk1, 0.1f, 0.1f, paladog.getXPos() / Metrics.game_width, paladog.getYPos() / Metrics.game_height - 0.06f, 1));
                     }
                 }
             }
         }));
 
-        int paladogRes[] = new int[4];
-        int paladogFramecnt[] = new int[4];
-        paladogRes[0] = R.drawable.paladogidle;
-        paladogFramecnt[0] = 12;
-        paladogRes[1] = R.drawable.paladogmove;
-        paladogFramecnt[1] = 12;
 
-        paladogRes[2] = R.drawable.paladogattack;
-        paladogFramecnt[2] = 10;
-        paladogRes[3] = R.drawable.paladogidle;
-        paladogFramecnt[3] = 12;
-        paladog = new Paladog(paladogRes, paladogFramecnt, 0.2f, 0.2f, 0.5f, 0.4f - 0.2f / 2, 100,  0.2f);
+        paladog = new Paladog(resInfo.paladogRes, resInfo.paladogFramecnt, resInfo.ally3sizeRate, 0.2f, 0.2f, 0.5f, 0.4f, 100,  4.0f);
 
-        foodNum = new Number(R.drawable.num, 0.313f, 0.55f, 0.04f, 0.04f, 50);
+        foodNum = new Number(R.drawable.num, 0.313f, 0.55f, 0.04f, 0.04f, 95);
         mpNum = new Number(R.drawable.num, 0.9f, 0.55f, 0.04f, 0.04f, 10);
 
         foodGauge = new Gauge(R.mipmap.foodgauge, 0.21f, 0.568f, 0.24f, 0.03f, 1);
@@ -209,38 +175,64 @@ public class PlayScene extends BaseScene {
 
         for (IGameObject gobj : enemies) {
             Enemy enemy = (Enemy)gobj;
-            if(enemy.isDead()) enemies.remove(gobj);
+            if(enemy.isDead()) removeObject(gobj);
         }
 
         for (IGameObject gobj : allies) {
             Ally ally = (Ally)gobj;
-            if(ally.isDead()) allies.remove(gobj);
+            if(ally.isDead()) removeObject(gobj);
         }
+
+        spawnCooldown -= Metrics.elapsedTime;
+        if(spawnCooldown < 0) {
+            spawnCooldown = spawnMaxCooldown;
+            add(new Enemy(resInfo.enemy1Resid, resInfo.enemy1FrameCnt, resInfo.enemy1sizeRate,0.12f, 0.2f, 1.0f, 0.4f, 30.f, -0.5f, 2.f, 3.f));
+        }
+
+
     }
 
     private void checkCollision() {
         Enemy forwardEnemy = null;
         Ally forwardAlly = null;
+        float minX = 2.0f * Metrics.game_width, maxX = 0.f;
+        float xPos;
+        // 적은 가장 앞의 아군에 대해서만 체크, 아군은 가장 앞의 적에 대해서만 체크
+        for(IGameObject enemyObj : enemies) {
+            Enemy enemy = (Enemy)enemyObj;
+            xPos = enemy.getXPos();
 
-        if(allies.size() > 0)
-            forwardAlly = (Ally)allies.get(0);
-        if(enemies.size() > 0)
-            forwardEnemy = (Enemy)enemies.get(0);
+            if(xPos < minX && enemy.GetState() != Unit.unitState.DIE) {
+                forwardEnemy = enemy;
+                minX = xPos;
+            }
+        }
+
+        for(IGameObject allyObj : allies) {
+            Ally ally = (Ally)allyObj;
+            xPos = ally.getXPos();
+            if(xPos > maxX && ally.GetState() != Unit.unitState.DIE) {
+                forwardAlly = ally;
+                maxX = xPos;
+            }
+        }
 
         if(attacks.size() > 0 && forwardEnemy != null) {
             IGameObject attack = attacks.get(0);
-            if(attack.getDstRect().contains(forwardEnemy.getDstRect())) {
-                attacks.remove(attack);
+            if(attack.getDstRect().intersect(forwardEnemy.getDstRect())) {
+                removeObject(attack);
                 forwardEnemy.ChangeState(Unit.unitState.DIE);
             }
         }
 
         if(forwardAlly != null) {
             for(IGameObject enemyObj : enemies) {
+
                 Enemy enemy = (Enemy)enemyObj;
+                if(enemy.hasTarget() || enemy.GetState() == Unit.unitState.DIE) continue;
                 // 이동하다 맨앞의 적을 만난경우
                 if(enemy.GetState() == Unit.unitState.MOVE && forwardAlly.GetState() != Unit.unitState.DIE) {
-                    if(enemy.getDstRect().contains(forwardAlly.getDstRect())) {
+                    if(enemy.getDstRect().intersect(forwardAlly.getDstRect())) {
                         enemy.setTargetUnit(forwardAlly);
                     }
                 }
@@ -251,8 +243,9 @@ public class PlayScene extends BaseScene {
             for(IGameObject allyObj : allies) {
                 Ally ally = (Ally)allyObj;
                 // 이동하다 맨앞의 적을 만난경우
+                if(ally.hasTarget() || ally.GetState() == Unit.unitState.DIE) continue;
                 if(ally.GetState() == Unit.unitState.MOVE && forwardEnemy.GetState() != Unit.unitState.DIE) {
-                    if(ally.getDstRect().contains(forwardEnemy.getDstRect())) {
+                    if(ally.getDstRect().intersect(forwardEnemy.getDstRect())) {
                         ally.setTargetUnit(forwardEnemy);
                     }
                 }

@@ -152,7 +152,7 @@ public class BaseScene {
         }
         return false;
     }
-    public void removeObject(IGameObject gobj) {
+        public void removeObject(IGameObject gobj) {
         handler.post(new Runnable() {
             @Override
             public void run() {
