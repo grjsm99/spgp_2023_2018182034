@@ -24,6 +24,7 @@ public class Gauge extends UI {
         animSprite.fixDstRect(baseX - baseWidth / 200 * (100 - gaugePercent), baseY, baseWidth * gaugePercent / 100, baseHeight);
     }
 
-
+    @Override
+    public void setDstRect(float x, float y) { baseX = x; baseY = y; }
 
 }

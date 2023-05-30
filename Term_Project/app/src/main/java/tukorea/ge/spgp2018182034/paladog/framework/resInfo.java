@@ -77,6 +77,23 @@ public class resInfo {
             12,12,16,12
     };
 
+    public static final int enemybaseResid[] = {
+            R.mipmap.enemybase,
+            R.mipmap.enemybase,
+            R.mipmap.enemybase,
+            R.mipmap.enemybase
+    };
+    public static final Float2 enemybasesizeRate[] = {
+            new Float2(1.0f, 1.0f),
+            new Float2(1.0f, 1.0f),
+
+            new Float2(1.7f, 1.9f),
+
+            new Float2(1.0f, 1.0f),
+    };
+    public static final int enemybaseFrameCnt[] = {
+            1,1,1,1
+    };
 
     public static final int paladogRes[] = {
             R.drawable.paladogidle, R.drawable.paladogmove,

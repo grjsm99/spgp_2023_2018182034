@@ -42,6 +42,12 @@ public class PlayScene extends BaseScene {
 
     private Gauge mpGauge;
 
+    private Gauge paladogGauge;
+
+    private Gauge enemyBaseGauge;
+
+    private Enemy enemyBase;
+
     public PlayScene(int stage) {
         this.stage = stage;
 
@@ -146,7 +152,22 @@ public class PlayScene extends BaseScene {
             }
         }));
 
+        add(new UIButton(R.mipmap.atk2button,R.mipmap.atk2button_pressed, 0.74f, 0.91f, 0.1f, 0.2f, 1, new IButtonReact() {
+            @Override
+            public void onClick(MotionEvent event) {
+                int eventType = event.getAction();
+                if(eventType == MotionEvent.ACTION_UP) {
+                    if (mpNum.getNumber() >= 5 && foodNum.getNumber() < 95) {
+                        paladog.attack();
+                        mpNum.addNumber(-5);
+                        foodNum.addNumber(5);
 
+                    }
+                }
+            }
+        }));
+
+        enemyBase = new Enemy(resInfo.enemybaseResid, resInfo.enemybaseFrameCnt, resInfo.enemybasesizeRate,0.5f, 0.5f, 3.0f, 0.4f, 100, 0.0f, 9999.f, 0.f);
         paladog = new Paladog(resInfo.paladogRes, resInfo.paladogFramecnt, resInfo.ally3sizeRate, 0.2f, 0.2f, 0.5f, 0.4f, 100,  4.0f);
 
         foodNum = new Number(R.drawable.num, 0.313f, 0.55f, 0.04f, 0.04f, 95);
@@ -154,19 +175,36 @@ public class PlayScene extends BaseScene {
 
         foodGauge = new Gauge(R.mipmap.foodgauge, 0.21f, 0.568f, 0.24f, 0.03f, 1);
         mpGauge = new Gauge(R.mipmap.mpgauge, 0.79f, 0.568f, 0.24f, 0.03f, 1);
+        paladogGauge = new Gauge(R.mipmap.hpgauge, 0.79f, 0.38f, 0.24f, 0.03f, 1);
+        enemyBaseGauge = new Gauge(R.mipmap.hpgauge, 0.79f, 0.38f, 0.24f, 0.03f, 1);
 
         add(foodGauge);
         add(mpGauge);
         add(foodNum);
         add(mpNum);
-
+        add(paladogGauge);
+        add(enemyBase);
+        add(enemyBaseGauge);
         //add(paladog);
     }
 
     @Override
     public void update(long elapsedNanos) {
         super.update(elapsedNanos);
+
         paladog.update();
+        float xpos, pPos = paladog.getXPos() / Metrics.game_width;
+        if(pPos >= 0.5f && pPos <= 2.5f) xpos = 0.5f;
+        else {
+            if(pPos > 2.5f) xpos = pPos-2.5f;
+            else xpos = pPos;
+        }
+        paladogGauge.setDstRect(xpos * Metrics.game_width, paladog.getYPos() - 1.6f);
+        paladogGauge.setPercent(paladog.getHP());
+
+        paladogGauge.setDstRect((pPos - 3.0f) * Metrics.game_width, enemyBase.getYPos() - 1.6f);
+        paladogGauge.setPercent(enemyBase.getHP());
+
         checkCollision();
         foodNum.setNumber(Math.min(foodNum.getNumber() + Metrics.elapsedTime, 100));
         mpNum.setNumber(Math.min(mpNum.getNumber() + Metrics.elapsedTime * 0.5f, 100));
@@ -186,7 +224,7 @@ public class PlayScene extends BaseScene {
         spawnCooldown -= Metrics.elapsedTime;
         if(spawnCooldown < 0) {
             spawnCooldown = spawnMaxCooldown;
-            add(new Enemy(resInfo.enemy1Resid, resInfo.enemy1FrameCnt, resInfo.enemy1sizeRate,0.12f, 0.2f, 1.0f, 0.4f, 30.f, -0.5f, 2.f, 3.f));
+            add(new Enemy(resInfo.enemy1Resid, resInfo.enemy1FrameCnt, resInfo.enemy1sizeRate,0.12f, 0.2f, 1.0f, 0.4f, 30000.f, -0.5f, 2.f, 0.f));
         }
 
 
@@ -194,7 +232,7 @@ public class PlayScene extends BaseScene {
 
     private void checkCollision() {
         Enemy forwardEnemy = null;
-        Ally forwardAlly = null;
+        Unit forwardAlly = null;
         float minX = 2.0f * Metrics.game_width, maxX = 0.f;
         float xPos;
         // 적은 가장 앞의 아군에 대해서만 체크, 아군은 가장 앞의 적에 대해서만 체크
@@ -208,13 +246,18 @@ public class PlayScene extends BaseScene {
             }
         }
 
+        forwardAlly = paladog;
+        maxX = paladog.getXPos();
         for(IGameObject allyObj : allies) {
             Ally ally = (Ally)allyObj;
             xPos = ally.getXPos();
             if(xPos > maxX && ally.GetState() != Unit.unitState.DIE) {
                 forwardAlly = ally;
                 maxX = xPos;
+
+
             }
+
         }
 
         if(attacks.size() > 0 && forwardEnemy != null) {
@@ -230,6 +273,7 @@ public class PlayScene extends BaseScene {
 
                 Enemy enemy = (Enemy)enemyObj;
                 if(enemy.hasTarget() || enemy.GetState() == Unit.unitState.DIE) continue;
+
                 // 이동하다 맨앞의 적을 만난경우
                 if(enemy.GetState() == Unit.unitState.MOVE && forwardAlly.GetState() != Unit.unitState.DIE) {
                     if(enemy.getDstRect().intersect(forwardAlly.getDstRect())) {

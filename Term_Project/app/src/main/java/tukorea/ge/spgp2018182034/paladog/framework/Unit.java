@@ -30,12 +30,12 @@ public class Unit implements IGameObject {
     };
     protected float x = 0;
     protected float y = 0;      // 월드 좌표값
-
+    protected float spriteY[];
     // 단독으로 생성자 호출 불가. => ally, enemy, paladog으로 만들어야함
     protected Unit(int[] resID, int[] resFrameCount, Float2[] resSizeRate, float xSize, float ySize, float xPos, float yPos, float hp, float moveSpeed) {
         animSprites = new AnimSprite[4];
         currState = unitState.IDLE;
-
+        spriteY = new float[unitState.NUM.ordinal()];
         float dRectSizeX;
         float dRectSizeY;
         for(int i=0; i<4; ++i)
@@ -46,6 +46,11 @@ public class Unit implements IGameObject {
             animSprites[i] = new AnimSprite(resID[i], xPos, yPos - dRectSizeY / 2, dRectSizeX, dRectSizeY, resFrameCount[i], loop[i]);
         }
         x = xPos * Metrics.game_width;
+        float tmp = 0;
+        for(int i=0; i<4; ++i) {
+            tmp+= resSizeRate[i].y;
+            spriteY[i] = ( yPos - (ySize * resSizeRate[i].y) / 2) * Metrics.game_height;
+        }
         y = ( yPos - (ySize * resSizeRate[0].y) / 2) * Metrics.game_height;
 
         this.moveSpeed = moveSpeed;
@@ -57,7 +62,7 @@ public class Unit implements IGameObject {
         if(currState == unitState.MOVE) {
             x += moveSpeed * Metrics.elapsedTime;
         }
-        animSprites[currState.ordinal()].fixDstRect(x, y);
+        animSprites[currState.ordinal()].fixDstRect(x, spriteY[currState.ordinal()]);
     }
 
     public void ChangeState(unitState state) {

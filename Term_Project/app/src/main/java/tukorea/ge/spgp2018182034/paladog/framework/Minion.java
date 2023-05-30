@@ -43,11 +43,23 @@ public class Minion extends Unit {
 
             if(atkCooldown < 0) {
                 // 공격 애니메이션을 실행하고 현재타겟에게 데미지를 준다.
-                animSprites[currState.ordinal()].ResetFrame();
-                atkCooldown = atkSpeed;
+
+                if(!getDstRect().intersect(targetUnit.getDstRect())) {
+                    targetUnit = null;
+                    currState = unitState.MOVE;
+                }
+                else {
+                    animSprites[currState.ordinal()].ResetFrame();
+                    atkCooldown = atkSpeed;
+                }
+
             }
             if(animSprites[currState.ordinal()].getCurrFrameIndex() == 5  && targetUnit != null) {
-                targetUnit.attacked(dmg);
+                if(!getDstRect().intersect(targetUnit.getDstRect())) {
+                    targetUnit = null;
+                    currState = unitState.MOVE;
+                }
+                else targetUnit.attacked(dmg);
             }
         }
     }

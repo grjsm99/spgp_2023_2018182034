@@ -11,9 +11,12 @@ import android.view.Choreographer;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.security.AccessController;
+
 public class GameView extends View implements Choreographer.FrameCallback {
     private static final String TAG = GameView.class.getSimpleName();
     public static Resources res;
+    public static GameView view;
     //    private Ball ball1, ball2;
     protected Paint fpsPaint;
     protected Paint borderPaint;
@@ -35,7 +38,7 @@ public class GameView extends View implements Choreographer.FrameCallback {
 
     private void init(AttributeSet attrs, int defStyle) {
         GameView.res = getResources();
-
+        GameView.view = this;
         running = true;
         Choreographer.getInstance().postFrameCallback(this);
         // 네비게이션 바 삭제
