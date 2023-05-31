@@ -18,10 +18,12 @@ import tukorea.ge.spgp2018182034.paladog.framework.Metrics;
 import tukorea.ge.spgp2018182034.paladog.framework.MovableUI;
 import tukorea.ge.spgp2018182034.paladog.framework.Number;
 import tukorea.ge.spgp2018182034.paladog.framework.Paladog;
+import tukorea.ge.spgp2018182034.paladog.framework.Sound;
 import tukorea.ge.spgp2018182034.paladog.framework.UI;
 import tukorea.ge.spgp2018182034.paladog.framework.UIButton;
 import tukorea.ge.spgp2018182034.paladog.framework.Unit;
 import tukorea.ge.spgp2018182034.paladog.framework.resInfo;
+
 
 public class PlayScene extends BaseScene {
     private static final String TAG = MainScene.class.getSimpleName();
@@ -103,6 +105,8 @@ public class PlayScene extends BaseScene {
             public void onClick(MotionEvent event) {
                 int eventType = event.getAction();
                 if(eventType == MotionEvent.ACTION_UP) {
+                    Sound.playEffect(R.raw.buttonclick);
+
                     if(foodNum.getNumber() >= 10) {
                         foodNum.addNumber(-10);
                         add(new Ally(resInfo.ally1Resid, resInfo.ally1FrameCnt, resInfo.ally1sizeRate, 0.13f, 0.13f, 0.0f, 0.4f, 10.f, 0.3f, 1.f, 2.f));
