@@ -15,7 +15,7 @@ public class resInfo {
             R.drawable.ally1move,
             R.drawable.ally1move,
             R.drawable.ally1attack,
-            R.drawable.ally1move
+            R.drawable.ally1die
     };
     public static final Float2 ally1sizeRate[] = {
             new Float2(1.0f, 1.0f),
@@ -26,7 +26,7 @@ public class resInfo {
             new Float2(1.0f, 1.0f),
     };
     public static final int ally1FrameCnt[] = {
-            12,12,16,12
+            12,12,16,16
     };
     public static final Float2 ally2sizeRate[] = {
             new Float2(1.0f, 1.0f),
@@ -62,19 +62,19 @@ public class resInfo {
     public static final int enemy1Resid[] = {
             R.drawable.enemy1move,
             R.drawable.enemy1move,
-            R.drawable.ally1attack,
-            R.drawable.enemy1move
+            R.drawable.enemy1attack,
+            R.drawable.enemy1die
     };
     public static final Float2 enemy1sizeRate[] = {
             new Float2(1.0f, 1.0f),
             new Float2(1.0f, 1.0f),
 
-            new Float2(1.7f, 1.9f),
+            new Float2(1.2f, 1.0f),
 
-            new Float2(1.0f, 1.0f),
+            new Float2(1.2f, 1.2f),
     };
     public static final int enemy1FrameCnt[] = {
-            12,12,16,12
+            12,12,10,16
     };
 
     public static final int enemybaseResid[] = {

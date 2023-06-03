@@ -52,6 +52,10 @@ public class PlayScene extends BaseScene {
 
     public PlayScene(int stage) {
         this.stage = stage;
+        //Sound.playMusic(R.raw.bg_stage);
+        Sound.playEffect(R.raw.start_battle);
+
+
 
         spawnMaxCooldown = 2.0f - (float)stage / 5.0f;
         spawnCooldown = spawnMaxCooldown;
@@ -206,8 +210,8 @@ public class PlayScene extends BaseScene {
         paladogGauge.setDstRect(xpos * Metrics.game_width, paladog.getYPos() - 1.6f);
         paladogGauge.setPercent(paladog.getHP());
 
-        paladogGauge.setDstRect((pPos - 3.0f) * Metrics.game_width, enemyBase.getYPos() - 1.6f);
-        paladogGauge.setPercent(enemyBase.getHP());
+        enemyBaseGauge.setDstRect((pPos - 3.0f) * Metrics.game_width, enemyBase.getYPos() - 1.6f);
+        enemyBaseGauge.setPercent(enemyBase.getHP());
 
         checkCollision();
         foodNum.setNumber(Math.min(foodNum.getNumber() + Metrics.elapsedTime, 100));
@@ -228,10 +232,9 @@ public class PlayScene extends BaseScene {
         spawnCooldown -= Metrics.elapsedTime;
         if(spawnCooldown < 0) {
             spawnCooldown = spawnMaxCooldown;
-            add(new Enemy(resInfo.enemy1Resid, resInfo.enemy1FrameCnt, resInfo.enemy1sizeRate,0.12f, 0.2f, 1.0f, 0.4f, 30000.f, -0.5f, 2.f, 0.f));
+
+            add(new Enemy(resInfo.enemy1Resid, resInfo.enemy1FrameCnt, resInfo.enemy1sizeRate, 0.12f, 0.2f, 1.0f, 0.4f, 30, -0.5f, 3.f, 0.5f));
         }
-
-
     }
 
     private void checkCollision() {
@@ -239,65 +242,59 @@ public class PlayScene extends BaseScene {
         Unit forwardAlly = null;
         float minX = 2.0f * Metrics.game_width, maxX = 0.f;
         float xPos;
-        // 적은 가장 앞의 아군에 대해서만 체크, 아군은 가장 앞의 적에 대해서만 체크
+
+
+        if(attacks.size() > 0) {
+            IGameObject attack = attacks.get(0);
+            for(IGameObject enemyObj : enemies) {
+                Enemy enemy = (Enemy)enemyObj;
+                if(Unit.intersect(attack.getDstRect(),enemy.getDstRect())) {
+                    removeObject(attack);
+                    enemy.ChangeState(Unit.unitState.DIE);
+                }
+            }
+
+        }
+
+
         for(IGameObject enemyObj : enemies) {
             Enemy enemy = (Enemy)enemyObj;
-            xPos = enemy.getXPos();
+            if(enemy.hasTarget() || enemy.GetState() == Unit.unitState.DIE) continue;
 
-            if(xPos < minX && enemy.GetState() != Unit.unitState.DIE) {
-                forwardEnemy = enemy;
-                minX = xPos;
+            if(enemy.GetState() == Unit.unitState.MOVE)  {
+                if(Unit.intersect(paladog.getDstRect(), enemy.getDstRect()))
+                    enemy.setTargetUnit(paladog);
+                else
+                for(IGameObject allyObj : allies) {
+                    // 이동하다 적을 만난경우
+                    Ally ally = (Ally)allyObj;
+                    if(ally.GetState() != Unit.unitState.DIE)
+                    {
+                        if(Unit.intersect(enemy.getDstRect(),ally.getDstRect())) {
+                            enemy.setTargetUnit(ally);
+                        }
+                    }
+                }
             }
+
+
         }
 
-        forwardAlly = paladog;
-        maxX = paladog.getXPos();
+
         for(IGameObject allyObj : allies) {
             Ally ally = (Ally)allyObj;
-            xPos = ally.getXPos();
-            if(xPos > maxX && ally.GetState() != Unit.unitState.DIE) {
-                forwardAlly = ally;
-                maxX = xPos;
-
-
-            }
-
-        }
-
-        if(attacks.size() > 0 && forwardEnemy != null) {
-            IGameObject attack = attacks.get(0);
-            if(attack.getDstRect().intersect(forwardEnemy.getDstRect())) {
-                removeObject(attack);
-                forwardEnemy.ChangeState(Unit.unitState.DIE);
-            }
-        }
-
-        if(forwardAlly != null) {
+            // 이동하다 적을 만난경우
+            if(ally.hasTarget() || ally.GetState() == Unit.unitState.DIE) continue;
             for(IGameObject enemyObj : enemies) {
-
                 Enemy enemy = (Enemy)enemyObj;
-                if(enemy.hasTarget() || enemy.GetState() == Unit.unitState.DIE) continue;
-
-                // 이동하다 맨앞의 적을 만난경우
-                if(enemy.GetState() == Unit.unitState.MOVE && forwardAlly.GetState() != Unit.unitState.DIE) {
-                    if(enemy.getDstRect().intersect(forwardAlly.getDstRect())) {
-                        enemy.setTargetUnit(forwardAlly);
+                if(ally.GetState() == Unit.unitState.MOVE && enemy.GetState() != Unit.unitState.DIE) {
+                    if(Unit.intersect(ally.getDstRect(),enemy.getDstRect())) {
+                        ally.setTargetUnit(enemy);
                     }
                 }
             }
-        }
 
-        if(forwardEnemy != null) {
-            for(IGameObject allyObj : allies) {
-                Ally ally = (Ally)allyObj;
-                // 이동하다 맨앞의 적을 만난경우
-                if(ally.hasTarget() || ally.GetState() == Unit.unitState.DIE) continue;
-                if(ally.GetState() == Unit.unitState.MOVE && forwardEnemy.GetState() != Unit.unitState.DIE) {
-                    if(ally.getDstRect().intersect(forwardEnemy.getDstRect())) {
-                        ally.setTargetUnit(forwardEnemy);
-                    }
-                }
-            }
+
         }
     }
 

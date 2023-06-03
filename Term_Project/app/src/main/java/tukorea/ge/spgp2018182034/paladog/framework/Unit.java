@@ -22,6 +22,7 @@ public class Unit implements IGameObject {
     protected float moveSpeed;
     protected float hp;
 
+    protected float maxHP;
     private final boolean loop[] = {
         true,
         true,
@@ -38,6 +39,7 @@ public class Unit implements IGameObject {
         spriteY = new float[unitState.NUM.ordinal()];
         float dRectSizeX;
         float dRectSizeY;
+
         for(int i=0; i<4; ++i)
         {
             dRectSizeX = xSize * resSizeRate[i].x;
@@ -54,6 +56,7 @@ public class Unit implements IGameObject {
         y = ( yPos - (ySize * resSizeRate[0].y) / 2) * Metrics.game_height;
 
         this.moveSpeed = moveSpeed;
+        this.maxHP = hp;
         this.hp = hp;
     }
     @Override
@@ -84,11 +87,16 @@ public class Unit implements IGameObject {
     public float getXPos() { return x; }
     public float getYPos() { return y; }
     public float getHP() { return hp; }
+    public float getMaxHP() { return maxHP; }
     @Override
     public RectF getDstRect() { return animSprites[currState.ordinal()].dstRect; }
 
     public void attacked(float dmg) {
         hp -= dmg;
         if(hp <= 0) ChangeState(unitState.DIE);
+    }
+
+    public static boolean intersect(RectF a, RectF b) {
+        return a.intersects(b.left, b.top, b.right, b.bottom);
     }
 }
