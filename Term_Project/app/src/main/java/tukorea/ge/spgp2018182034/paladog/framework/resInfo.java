@@ -46,11 +46,11 @@ public class resInfo {
     public static final int ally3Resid[] = {
             R.drawable.ally3move,
             R.drawable.ally3move,
-            R.drawable.ally3move,
-            R.drawable.ally3move
+            R.drawable.ally3attack,
+            R.drawable.ally3die
     };
     public static final int ally3FrameCnt[] = {
-            12,12,12,12
+            12,12,10,16
     };
     public static final Float2 ally3sizeRate[] = {
             new Float2(1.0f, 1.0f),

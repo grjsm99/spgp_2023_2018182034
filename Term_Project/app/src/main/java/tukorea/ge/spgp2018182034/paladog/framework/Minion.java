@@ -10,7 +10,7 @@ import tukorea.ge.spgp2018182034.paladog.framework.Unit;
 // 아군 및 적군 유닛들에 대한 클래스
 public class Minion extends Unit {
     protected float atkSpeed;
-    protected float atkCooldown;
+    protected float atkCooldown = 0.f;
     protected float dmg;
     protected Unit targetUnit;      // 공격을 가할 목표
 
@@ -30,14 +30,10 @@ public class Minion extends Unit {
     @Override
     public void update() {
         super.update();
-
-
-
-
         if(currState == unitState.MOVE) {
             if(targetUnit != null) {
                 ChangeState(unitState.ATTACK);
-                atkCooldown = 0;
+
             }
             else {
                 x += moveSpeed * Metrics.elapsedTime;
@@ -76,7 +72,6 @@ public class Minion extends Unit {
                 if(!intersect(getDstRect(), targetUnit.getDstRect())) {
                     targetUnit = null;
                     currState = unitState.MOVE;
-                    atkCooldown = 0;
                 }
                 else {
                     targetUnit.attacked(dmg);
