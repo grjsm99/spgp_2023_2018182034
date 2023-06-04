@@ -33,7 +33,6 @@ public class Minion extends Unit {
         if(currState == unitState.MOVE) {
             if(targetUnit != null) {
                 ChangeState(unitState.ATTACK);
-
             }
             else {
                 x += moveSpeed * Metrics.elapsedTime;
@@ -48,6 +47,7 @@ public class Minion extends Unit {
             if(dieTime > 2.0f) x -= moveSpeed / Math.abs(moveSpeed) * 5.f * Metrics.elapsedTime;
             dieTime -= Metrics.elapsedTime;
         }
+
         if(currState == unitState.ATTACK) {
             atkCooldown -= Metrics.elapsedTime;
             // 타겟이 죽으면 타겟지정을 해제한다.
@@ -59,7 +59,7 @@ public class Minion extends Unit {
             if(atkCooldown < 0) {
                 // 공격 애니메이션을 실행하고 현재타겟에게 데미지를 준다.
                 isattack = false;
-                if(!intersect(getDstRect(), targetUnit.getDstRect())) {
+                if(targetUnit != null && !intersect(getDstRect(), targetUnit.getDstRect())) {
                     targetUnit = null;
                     currState = unitState.MOVE;
                 }
@@ -74,6 +74,7 @@ public class Minion extends Unit {
                     currState = unitState.MOVE;
                 }
                 else {
+                    Sound.playEffect(R.raw.minionattacks);
                     targetUnit.attacked(dmg);
                     isattack = true;
                 }

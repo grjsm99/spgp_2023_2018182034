@@ -31,7 +31,7 @@ public class resInfo {
     public static final Float2 ally2sizeRate[] = {
             new Float2(1.0f, 1.0f),
             new Float2(1.0f, 1.0f),
-            new Float2(1.0f, 1.0f),
+            new Float2(1.05f, 1.05f),
             new Float2(1.0f, 1.0f),
     };
     public static final int ally2Resid[] = {
@@ -76,6 +76,25 @@ public class resInfo {
     public static final int enemy1FrameCnt[] = {
             12,12,10,16
     };
+    public static final int enemy2Resid[] = {
+            R.drawable.enemy2move,
+            R.drawable.enemy2move,
+            R.drawable.enemy2attack,
+            R.drawable.enemy2die
+    };
+    public static final Float2 enemy2sizeRate[] = {
+            new Float2(1.0f, 1.0f),
+            new Float2(1.0f, 1.0f),
+
+            new Float2(1.2f, 1.0f),
+
+            new Float2(1.2f, 1.2f),
+    };
+    public static final int enemy2FrameCnt[] = {
+            12,12,10,16
+    };
+
+
 
     public static final int enemybaseResid[] = {
             R.mipmap.enemybase,
@@ -83,17 +102,7 @@ public class resInfo {
             R.mipmap.enemybase,
             R.mipmap.enemybase
     };
-    public static final Float2 enemybasesizeRate[] = {
-            new Float2(1.0f, 1.0f),
-            new Float2(1.0f, 1.0f),
 
-            new Float2(1.7f, 1.9f),
-
-            new Float2(1.0f, 1.0f),
-    };
-    public static final int enemybaseFrameCnt[] = {
-            1,1,1,1
-    };
 
     public static final int paladogRes[] = {
             R.drawable.paladogidle, R.drawable.paladogmove,

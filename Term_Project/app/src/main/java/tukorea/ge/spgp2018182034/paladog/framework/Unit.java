@@ -6,6 +6,8 @@ import android.graphics.RectF;
 import android.renderscript.Float2;
 import android.util.Log;
 
+import tukorea.ge.spgp2018182034.paladog.R;
+
 
 // 움직이며 상태가 있는 게임 오브젝트들
 public class Unit implements IGameObject {
@@ -93,7 +95,10 @@ public class Unit implements IGameObject {
 
     public void attacked(float dmg) {
         hp -= dmg;
-        if(hp <= 0) ChangeState(unitState.DIE);
+        if(hp <= 0) {
+            ChangeState(unitState.DIE);
+            Sound.playEffect(R.raw.hit_01);
+        }
     }
 
     public static boolean intersect(RectF a, RectF b) {
