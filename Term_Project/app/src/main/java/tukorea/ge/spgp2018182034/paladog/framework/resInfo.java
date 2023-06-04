@@ -37,11 +37,11 @@ public class resInfo {
     public static final int ally2Resid[] = {
             R.drawable.ally2move,
             R.drawable.ally2move,
-            R.drawable.ally2move,
-            R.drawable.ally2move
+            R.drawable.ally2attack,
+            R.drawable.ally2die
     };
     public static final int ally2FrameCnt[] = {
-            12,12,12,12
+            12,12,10,16
     };
     public static final int ally3Resid[] = {
             R.drawable.ally3move,

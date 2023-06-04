@@ -17,7 +17,7 @@ public class Minion extends Unit {
     protected Gauge hpGauge;
     protected float yConVel = 5.f;
     protected float xConVel = 1.f;
-
+    protected boolean isattack = false;
     protected float dieTime = 2.5f;
     public Minion(int[] resID, int[] resFrameCount, Float2[] resSizeRate, float xSize, float ySize, float xPos, float yPos, float hp, float moveSpeed, float atkSpped, float dmg) {
         super(resID, resFrameCount, resSizeRate, xSize, ySize, xPos, yPos, hp, moveSpeed);
@@ -62,7 +62,7 @@ public class Minion extends Unit {
             }
             if(atkCooldown < 0) {
                 // 공격 애니메이션을 실행하고 현재타겟에게 데미지를 준다.
-
+                isattack = false;
                 if(!intersect(getDstRect(), targetUnit.getDstRect())) {
                     targetUnit = null;
                     currState = unitState.MOVE;
@@ -72,13 +72,16 @@ public class Minion extends Unit {
                     atkCooldown = atkSpeed;
                 }
             }
-            if(animSprites[currState.ordinal()].getCurrFrameIndex() == 5  && targetUnit != null) {
+            if(animSprites[currState.ordinal()].getCurrFrameIndex() == 9  && targetUnit != null && !isattack) {
                 if(!intersect(getDstRect(), targetUnit.getDstRect())) {
                     targetUnit = null;
                     currState = unitState.MOVE;
                     atkCooldown = 0;
                 }
-                else targetUnit.attacked(dmg);
+                else {
+                    targetUnit.attacked(dmg);
+                    isattack = true;
+                }
             }
 
         }

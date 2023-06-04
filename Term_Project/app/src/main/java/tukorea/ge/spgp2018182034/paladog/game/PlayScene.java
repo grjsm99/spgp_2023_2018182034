@@ -233,7 +233,7 @@ public class PlayScene extends BaseScene {
         if(spawnCooldown < 0) {
             spawnCooldown = spawnMaxCooldown;
 
-            add(new Enemy(resInfo.enemy1Resid, resInfo.enemy1FrameCnt, resInfo.enemy1sizeRate, 0.12f, 0.2f, 1.0f, 0.4f, 30, -0.5f, 3.f, 0.5f));
+            add(new Enemy(resInfo.enemy1Resid, resInfo.enemy1FrameCnt, resInfo.enemy1sizeRate, 0.12f, 0.2f, 1.0f, 0.4f, 20, -0.5f, 3.f, 5.f));
         }
     }
 
