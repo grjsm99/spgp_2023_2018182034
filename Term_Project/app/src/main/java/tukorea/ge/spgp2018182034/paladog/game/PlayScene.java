@@ -48,6 +48,8 @@ public class PlayScene extends BaseScene {
 
     private Gauge paladogGauge;
 
+    private boolean done = false;
+    private float resultTime = 3.f;
 
     public PlayScene(int stage) {
         this.stage = stage;
@@ -59,7 +61,7 @@ public class PlayScene extends BaseScene {
         spawnCooldown1 = spawnMaxCooldown1;
         spawnCooldown2 = spawnMaxCooldown2;
         Metrics.x_offset = 0;
-        add(new MovableUI(resInfo.bgResid[stage], 0.5f, 0.25f, 3, 0.6f, 1));
+        add(new MovableUI(resInfo.bgResid[stage], 0.5f, 0.25f, 3, 0.62f, 1));
         add(new MovableUI(resInfo.enemybaseResid[0], 2.0f, 0.2f, 0.3f, 0.5f, 1));
         add(new UI(R.mipmap.playui, 0.5f, 0.75f, 1, 0.6f, 1));
         add(new UIButton(R.mipmap.rightmove,R.mipmap.rightmove_pressed, 0.38f, 0.915f, 0.223f, 0.17f, 1, new IButtonReact() {
@@ -203,6 +205,7 @@ public class PlayScene extends BaseScene {
 
     @Override
     public void update(long elapsedNanos) {
+
         super.update(elapsedNanos);
 
         paladog.update();
@@ -217,7 +220,7 @@ public class PlayScene extends BaseScene {
 
 
         checkCollision();
-        foodNum.setNumber(Math.min(foodNum.getNumber() + Metrics.elapsedTime * 1.8f, 100));
+        foodNum.setNumber(Math.min(foodNum.getNumber() + Metrics.elapsedTime * 8.8f, 100));
         mpNum.setNumber(Math.min(mpNum.getNumber() + Metrics.elapsedTime * 1.2f, 100));
         foodGauge.setPercent(foodNum.getNumber());
         mpGauge.setPercent(mpNum.getNumber());
@@ -230,8 +233,19 @@ public class PlayScene extends BaseScene {
         for (IGameObject gobj : allies) {
             Ally ally = (Ally)gobj;
             if(ally.isDead()) removeObject(gobj);
+            if(ally.getXPos() > 1.95f * Metrics.game_width) {
+                UIButtons.clear();
+                add(new UI(R.mipmap.clear, 0.5f, 0.5f, 1, 1, 1));
+                done = true;
+            }
+        }
+        if(done) {
+            resultTime -= Metrics.elapsedTime;
+            if(resultTime <= 0) popScene();
         }
 
+
+        if(paladog.getHP() <= 0) popScene();
         spawnCooldown1 -= Metrics.elapsedTime;
         if(spawnCooldown1 < 0) {
             spawnCooldown1 = spawnMaxCooldown1;
