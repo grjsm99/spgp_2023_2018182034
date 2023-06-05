@@ -40,8 +40,10 @@ public class PlayScene extends BaseScene {
     private int stage;
     private float spawnMaxCooldown1;
     private float spawnMaxCooldown2;
+    private float spawnMaxCooldown3;
     private float spawnCooldown1;
     private float spawnCooldown2;
+    private float spawnCooldown3;
     private Gauge foodGauge;
 
     private Gauge mpGauge;
@@ -56,10 +58,12 @@ public class PlayScene extends BaseScene {
         Sound.playMusic(R.raw.bg_stage);
         Sound.playEffect(R.raw.start_battle);
 
-        spawnMaxCooldown1 = 3.0f - (float)stage / 3.0f;
-        spawnMaxCooldown2 = 30.0f - (float)stage * 2.0f;
+        spawnMaxCooldown1 = 6.0f - (float)stage / 3.0f;
+        spawnMaxCooldown2 = 35.0f - (float)stage * 2.0f;
+        spawnMaxCooldown3 = 8.0f - (float)stage / 2.0f;
         spawnCooldown1 = spawnMaxCooldown1;
         spawnCooldown2 = spawnMaxCooldown2;
+        spawnCooldown3 = spawnMaxCooldown3;
         Metrics.x_offset = 0;
         add(new MovableUI(resInfo.bgResid[stage], 0.5f, 0.25f, 3, 0.62f, 1));
         add(new MovableUI(resInfo.enemybaseResid[0], 2.0f, 0.2f, 0.3f, 0.5f, 1));
@@ -158,9 +162,9 @@ public class PlayScene extends BaseScene {
                 int eventType = event.getAction();
                 if(eventType == MotionEvent.ACTION_UP) {
                     Sound.playEffect(R.raw.buttonclick);
-                    if (mpNum.getNumber() > 3 && paladog.GetState() != Unit.unitState.ATTACK) {
+                    if (mpNum.getNumber() > 5 && paladog.GetState() != Unit.unitState.ATTACK) {
                         paladog.attack();
-                        mpNum.addNumber(-3);
+                        mpNum.addNumber(-5);
                         Sound.playEffect(R.raw.paladogattack);
                         add(new Attack(R.mipmap.atk1, 0.1f, 0.1f, paladog.getXPos() / Metrics.game_width, paladog.getYPos() / Metrics.game_height - 0.06f, 1));
                     }
@@ -220,8 +224,8 @@ public class PlayScene extends BaseScene {
 
 
         checkCollision();
-        foodNum.setNumber(Math.min(foodNum.getNumber() + Metrics.elapsedTime * 8.8f, 100));
-        mpNum.setNumber(Math.min(mpNum.getNumber() + Metrics.elapsedTime * 1.2f, 100));
+        foodNum.setNumber(Math.min(foodNum.getNumber() + Metrics.elapsedTime * 2.0f, 100));
+        mpNum.setNumber(Math.min(mpNum.getNumber() + Metrics.elapsedTime * 2.5f, 100));
         foodGauge.setPercent(foodNum.getNumber());
         mpGauge.setPercent(mpNum.getNumber());
 
@@ -257,6 +261,12 @@ public class PlayScene extends BaseScene {
             spawnCooldown2 = spawnMaxCooldown2;
             add(new Enemy(resInfo.enemy2Resid, resInfo.enemy2FrameCnt, resInfo.enemy2sizeRate, 0.18f, 0.3f, 2.0f, 0.4f, 300, -0.25f, 5.f, 25.f));
         }
+
+        spawnCooldown3 -= Metrics.elapsedTime;
+        if(spawnCooldown3 < 0) {
+            spawnCooldown3 = spawnMaxCooldown3;
+            add(new Enemy(resInfo.enemy3Resid, resInfo.enemy3FrameCnt, resInfo.enemy3sizeRate, 0.1f, 0.18f, 2.0f, 0.4f, 20, -0.8f, 3.f, 10.f));
+        }
     }
 
     private void checkCollision() {
@@ -264,7 +274,7 @@ public class PlayScene extends BaseScene {
             IGameObject attack = attacks.get(0);
             for(IGameObject enemyObj : enemies) {
                 Enemy enemy = (Enemy)enemyObj;
-                if(Unit.intersect(attack.getDstRect(),enemy.getDstRect())) {
+                if(enemy.GetState() != Unit.unitState.DIE && Unit.intersect(attack.getDstRect(),enemy.getDstRect())) {
                     enemy.attacked(20);
                     removeObject(attack);
                 }

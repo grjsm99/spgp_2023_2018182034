@@ -94,7 +94,23 @@ public class resInfo {
             12,12,10,16
     };
 
+    public static final int enemy3Resid[] = {
+            R.drawable.enemy3move,
+            R.drawable.enemy3move,
+            R.drawable.enemy3attack,
+            R.drawable.enemy3die
+    };
+    public static final Float2 enemy3sizeRate[] = {
+            new Float2(1.0f, 1.0f),
+            new Float2(1.0f, 1.0f),
 
+            new Float2(1.2f, 1.0f),
+
+            new Float2(1.2f, 1.2f),
+    };
+    public static final int enemy3FrameCnt[] = {
+            12,12,10,16
+    };
 
     public static final int enemybaseResid[] = {
             R.mipmap.enemybase,
