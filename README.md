@@ -9,8 +9,56 @@
 # 개발 범위
 게임 내 전투에 필요한 유닛 3종, 적 유닛 3종 공격, 이동 애니메이션 및 공격 구현, 플레이어의 이동, 스테이지 2개 구현 -> 스테이지 3개 구현
 
+아군 몬스터
+
+![image](https://github.com/grjsm99/spgp_2023_2018182034/assets/44054161/888731a5-b161-4e42-90f4-42e3613541c6)
+가격 : 10<br/>
+체력 : 20<br/>
+이동속도 : 0.5<br/>
+공격속도 : 1/s<br/>
+데미지 : 10<br/>
+
+
+![image](https://github.com/grjsm99/spgp_2023_2018182034/assets/44054161/a7c67d35-cf34-4cc6-aecb-1c059983b7bc)
+<br/>
+가격 : 30<br/>
+체력 : 300<br/>
+이동속도 : 0.25<br/>
+공격속도 0.33/s<br/>
+데미지 : 5<br/>
+
+![image](https://github.com/grjsm99/spgp_2023_2018182034/assets/44054161/1468156a-e29b-48c1-9df8-d82769aba810)
+<br/>
+가격 : 40<br/>
+체력 : 90<br/>
+이동속도 : 1<br/>
+공격속도 : 1/s<br/>
+데미지 : 20<br/>
+
+
+적 몬스터
+![image](https://github.com/grjsm99/spgp_2023_2018182034/assets/44054161/55ba1891-ea49-48be-9a3b-97ff4fc75201)<br/>
+체력 : 50<br/>
+이동속도 : 0.5<br/>
+공격속도 : 0.33/s<br/>
+데미지 : 5<br/>
+
+![image](https://github.com/grjsm99/spgp_2023_2018182034/assets/44054161/4e7c947a-a281-4f89-a595-a4958a12e1c8)<br/>
+체력 : 20<br/>
+이동속도 : 0.8<br/>
+공격속도 : 0.33/s<br/>
+데미지 : 10<br/>
+
+![image](https://github.com/grjsm99/spgp_2023_2018182034/assets/44054161/6a338dc9-b8e2-4116-b9a2-93c49fceeb29)<br/>
+체력 : 300<br/>
+이동속도 : 0.25<br/>
+공격속도 : 0.2/s<br/>
+데미지 : 25<br/>
+
+
 # 개발 진행도
 ![image](https://github.com/grjsm99/spgp_2023_2018182034/assets/44054161/c5ecba33-1268-49c7-8c04-b7ca107fad9c)
+
 
 # 커밋 기록
 ![image](https://github.com/grjsm99/spgp_2023_2018182034/assets/44054161/b37247f3-d2f9-4e5d-9267-733a64c9d1c6)
