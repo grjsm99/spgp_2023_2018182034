@@ -1,28 +1,20 @@
 package tukorea.ge.spgp2018182034.paladog.game;
 
 import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.renderscript.Float2;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import tukorea.ge.spgp2018182034.paladog.R;
-import tukorea.ge.spgp2018182034.paladog.framework.Ally;
-import tukorea.ge.spgp2018182034.paladog.framework.Attack;
 import tukorea.ge.spgp2018182034.paladog.framework.BaseScene;
-import tukorea.ge.spgp2018182034.paladog.framework.Enemy;
 import tukorea.ge.spgp2018182034.paladog.framework.Gauge;
 import tukorea.ge.spgp2018182034.paladog.framework.IButtonReact;
 import tukorea.ge.spgp2018182034.paladog.framework.IGameObject;
+import tukorea.ge.spgp2018182034.paladog.framework.MainScene;
 import tukorea.ge.spgp2018182034.paladog.framework.Metrics;
 import tukorea.ge.spgp2018182034.paladog.framework.MovableUI;
 import tukorea.ge.spgp2018182034.paladog.framework.Number;
-import tukorea.ge.spgp2018182034.paladog.framework.Paladog;
 import tukorea.ge.spgp2018182034.paladog.framework.Sound;
 import tukorea.ge.spgp2018182034.paladog.framework.UI;
 import tukorea.ge.spgp2018182034.paladog.framework.UIButton;
-import tukorea.ge.spgp2018182034.paladog.framework.Unit;
-import tukorea.ge.spgp2018182034.paladog.framework.resInfo;
 
 
 public class PlayScene extends BaseScene {

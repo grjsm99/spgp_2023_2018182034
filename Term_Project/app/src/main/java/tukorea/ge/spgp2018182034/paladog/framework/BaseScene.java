@@ -9,6 +9,10 @@ import android.view.MotionEvent;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import tukorea.ge.spgp2018182034.paladog.game.Ally;
+import tukorea.ge.spgp2018182034.paladog.game.Attack;
+import tukorea.ge.spgp2018182034.paladog.game.Enemy;
+
 
 public class BaseScene {
     private static Stack<BaseScene> scenes = new Stack<>();

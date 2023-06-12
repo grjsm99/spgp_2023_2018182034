@@ -1,4 +1,4 @@
-package tukorea.ge.spgp2018182034.paladog.framework;
+package tukorea.ge.spgp2018182034.paladog.game;
 
 import android.renderscript.Float2;
 

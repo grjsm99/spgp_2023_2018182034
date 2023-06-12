@@ -42,6 +42,9 @@ public class Sprite {
         float half_height = h / 2;
         dstRect.set(nx - half_width, ny - half_height, nx + half_width, ny + half_height);
     }
+    public RectF getDstRect()  {
+        return dstRect;
+    }
 
     public void draw(Canvas canvas) {
         canvas.drawBitmap(bitmap, null, dstRect, null);

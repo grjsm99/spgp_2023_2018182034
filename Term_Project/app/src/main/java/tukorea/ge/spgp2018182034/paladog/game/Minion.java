@@ -1,12 +1,13 @@
-package tukorea.ge.spgp2018182034.paladog.framework;
+package tukorea.ge.spgp2018182034.paladog.game;
 
 import android.graphics.Canvas;
 import android.renderscript.Float2;
-import android.util.Log;
 
 import tukorea.ge.spgp2018182034.paladog.R;
-import tukorea.ge.spgp2018182034.paladog.framework.Sprite;
-import tukorea.ge.spgp2018182034.paladog.framework.Unit;
+import tukorea.ge.spgp2018182034.paladog.framework.Gauge;
+import tukorea.ge.spgp2018182034.paladog.framework.Metrics;
+import tukorea.ge.spgp2018182034.paladog.framework.Sound;
+import tukorea.ge.spgp2018182034.paladog.game.Unit;
 // 아군 및 적군 유닛들에 대한 클래스
 public class Minion extends Unit {
     protected float atkSpeed;

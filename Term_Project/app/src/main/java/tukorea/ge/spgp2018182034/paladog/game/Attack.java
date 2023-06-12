@@ -1,7 +1,11 @@
-package tukorea.ge.spgp2018182034.paladog.framework;
+package tukorea.ge.spgp2018182034.paladog.game;
 
 import android.graphics.Canvas;
 import android.graphics.RectF;
+
+import tukorea.ge.spgp2018182034.paladog.framework.AnimSprite;
+import tukorea.ge.spgp2018182034.paladog.framework.IGameObject;
+import tukorea.ge.spgp2018182034.paladog.framework.Metrics;
 
 public class Attack implements IGameObject {
 
@@ -31,5 +35,5 @@ public class Attack implements IGameObject {
     }
 
     @Override
-    public RectF getDstRect() { return animSprite.dstRect; }
+    public RectF getDstRect() { return animSprite.getDstRect(); }
 }

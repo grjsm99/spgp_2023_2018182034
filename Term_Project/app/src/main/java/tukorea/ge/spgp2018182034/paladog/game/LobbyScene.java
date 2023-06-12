@@ -1,14 +1,11 @@
 package tukorea.ge.spgp2018182034.paladog.game;
 
-import android.graphics.Rect;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import tukorea.ge.spgp2018182034.paladog.R;
 import tukorea.ge.spgp2018182034.paladog.framework.BaseScene;
 import tukorea.ge.spgp2018182034.paladog.framework.IButtonReact;
-import tukorea.ge.spgp2018182034.paladog.framework.IGameObject;
-import tukorea.ge.spgp2018182034.paladog.framework.Metrics;
+import tukorea.ge.spgp2018182034.paladog.framework.MainScene;
 import tukorea.ge.spgp2018182034.paladog.framework.UI;
 import tukorea.ge.spgp2018182034.paladog.framework.UIButton;
 

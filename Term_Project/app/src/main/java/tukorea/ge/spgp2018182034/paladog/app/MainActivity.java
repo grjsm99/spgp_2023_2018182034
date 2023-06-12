@@ -4,15 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Point;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 
-import tukorea.ge.spgp2018182034.paladog.R;
 import tukorea.ge.spgp2018182034.paladog.framework.BaseScene;
 import tukorea.ge.spgp2018182034.paladog.framework.GameView;
 import tukorea.ge.spgp2018182034.paladog.framework.Metrics;
 import tukorea.ge.spgp2018182034.paladog.game.LobbyScene;
-import tukorea.ge.spgp2018182034.paladog.game.MainScene;
 
 public class MainActivity extends AppCompatActivity {
 
